@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <filter id="glass" x="-5%" y="-20%" width="110%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.14" numOctaves="2" seed="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" result="disp"/>
+      <feGaussianBlur in="disp" stdDeviation="6 0.4"/>
+    </filter>
+    <style>
+      .display{font-family:'Space Grotesk','Helvetica Neue',sans-serif;font-weight:700;fill:#0A0A0A}
+      .italic{font-style:italic;font-weight:500}
+      .mono{font-family:'Space Mono',monospace;fill:#0A0A0A}
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="#EDECE7"/>
+
+  <!-- vertical grid lines -->
+  <g stroke="rgba(10,10,10,.08)" stroke-width="1">
+    <line x1="100" y1="0" x2="100" y2="630"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="500" y1="0" x2="500" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="700" y1="0" x2="700" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+    <line x1="1100" y1="0" x2="1100" y2="630"/>
+  </g>
+
+  <!-- top rule -->
+  <line x1="60" y1="80" x2="1140" y2="80" stroke="#0A0A0A" stroke-width="1.5"/>
+  <line x1="60" y1="130" x2="1140" y2="130" stroke="#0A0A0A" stroke-width="1.5"/>
+
+  <!-- logo mark + wordmark -->
+  <g transform="translate(60 92) scale(0.11)" fill="#0A0A0A" fill-rule="evenodd">
+    <path d="M155 15 L185 15 L75 275 L45 275 Z"/>
+    <path d="M155 15 L185 15 L295 275 L265 275 Z"/>
+    <path d="M0 150 L190 150 L190 180 L0 180 Z"/>
+    <path d="M40 65 L110 82 L102 108 L35 90 Z"/>
+  </g>
+  <text x="104" y="114" class="display" font-size="22" letter-spacing="1">AERIONN</text>
+
+  <!-- meta cells -->
+  <text x="600" y="105" class="mono" font-size="13" font-weight="700">2026</text>
+  <text x="600" y="122" class="mono" font-size="11" opacity=".6">Forma N°01</text>
+  <text x="900" y="105" class="mono" font-size="13" font-weight="700">Coming Soon</text>
+  <text x="900" y="122" class="mono" font-size="11" opacity=".6">Spring MMXXVI</text>
+
+  <!-- big display -->
+  <text x="60" y="290" class="display" font-size="96" letter-spacing="-4" filter="url(#glass)">The carry-on,</text>
+  <text x="200" y="400" class="display italic" font-size="96" letter-spacing="-3">reconsidered.</text>
+  <text x="60" y="510" class="display" font-size="96" letter-spacing="-4" text-anchor="start" filter="url(#glass)">In titanium.</text>
+
+  <!-- bottom rule -->
+  <line x1="60" y1="555" x2="1140" y2="555" stroke="#0A0A0A" stroke-width="1.5"/>
+
+  <!-- footer -->
+  <text x="60" y="585" class="mono" font-size="12" font-weight="700">AERIONN — Milano</text>
+  <text x="60" y="602" class="mono" font-size="11" opacity=".6">Elevated Journeys</text>
+  <text x="1140" y="585" class="mono" font-size="12" font-weight="700" text-anchor="end">aerionn.com</text>
+  <text x="1140" y="602" class="mono" font-size="11" opacity=".6" text-anchor="end">@aerionn</text>
+</svg>

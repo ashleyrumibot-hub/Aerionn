@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" fill="none" aria-label="Aerionn — Elevated Journeys">
+  <!-- monogram mark -->
+  <g stroke="currentColor" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter" fill="none">
+    <path d="M230 150 L300 30 L370 150"/>
+    <path d="M268 88 L314 30 L360 88"/>
+    <path d="M275 76 L355 56"/>
+  </g>
+  <!-- wordmark AERIONN -->
+  <g fill="currentColor">
+    <text x="300" y="260" font-family="Archivo, Inter, system-ui, sans-serif" font-weight="400" font-size="78" letter-spacing="18" text-anchor="middle">AERIONN</text>
+    <text x="300" y="320" font-family="Archivo, Inter, system-ui, sans-serif" font-weight="400" font-size="22" letter-spacing="10" text-anchor="middle">ELEVATED JOURNEYS</text>
+  </g>
+</svg>
