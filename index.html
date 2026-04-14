@@ -168,7 +168,8 @@ body.dark-grid .grid-bg::before{
 @media(max-width:760px){
   .masthead .grid12{display:grid;grid-template-columns:1fr 1fr;row-gap:16px}
   .mast-cell{grid-column:span 1!important;border-left:0;padding:0}
-  .mast-brand{grid-column:1/-1!important}
+  .mast-brand{grid-column:1/-1!important;text-align:left}
+  .mast-cell:nth-child(even){text-align:right}
 }
 
 /* ══════════════════ NAV (fixed, floating) ══════════════════ */
@@ -184,31 +185,29 @@ body.dark-nav .nav-fixed{background:var(--inv-bg);color:var(--inv-fg);border-bot
 .nav-fixed .brand img{width:22px;height:22px;display:block}
 body.dark-nav .nav-fixed .brand img{filter:invert(1)}
 .nav-fixed .brand-name{font-family:"Inter",sans-serif;font-weight:200;font-size:14px;letter-spacing:.34em}
-.nav-fixed .brand{cursor:pointer;position:relative}
-.nav-fixed .audio-ind{
-  display:inline-flex;align-items:center;gap:3px;margin-left:10px;
-  padding:4px 8px;border:1px solid currentColor;border-radius:999px;
-  font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
-  opacity:.55;transition:opacity .3s;
+/* Sound toggle — standalone button (not on brand) */
+.mute-btn{
+  position:fixed;bottom:20px;right:20px;z-index:92;
+  background:var(--bg);color:var(--fg);border:1px solid var(--fg);border-radius:999px;
+  padding:10px 16px;display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  transition:background .3s,color .3s,transform .3s,border-color .3s;
+  line-height:1;
 }
-.nav-fixed .brand:hover .audio-ind{opacity:1}
-.nav-fixed .audio-ind .bars{display:inline-flex;gap:2px;align-items:flex-end;height:10px}
-.nav-fixed .audio-ind .bars i{display:block;width:2px;background:currentColor;height:30%}
-body:not(.audio-muted) .nav-fixed .audio-ind{opacity:1}
-body:not(.audio-muted) .nav-fixed .audio-ind .bars i{animation:eq 1.1s ease-in-out infinite}
-body:not(.audio-muted) .nav-fixed .audio-ind .bars i:nth-child(2){animation-delay:.2s}
-body:not(.audio-muted) .nav-fixed .audio-ind .bars i:nth-child(3){animation-delay:.4s}
-@keyframes eq{
-  0%,100%{height:30%}
-  50%{height:100%}
+body.dark-nav .mute-btn{background:var(--inv-bg);color:var(--inv-fg);border-color:var(--inv-fg)}
+.mute-btn:hover{transform:translateY(-2px)}
+.mute-btn .bars{display:inline-flex;gap:2px;align-items:flex-end;height:12px;position:relative}
+.mute-btn .bars i{display:block;width:2px;background:currentColor;height:30%}
+body:not(.audio-muted) .mute-btn .bars i{animation:eq 1.1s ease-in-out infinite}
+body:not(.audio-muted) .mute-btn .bars i:nth-child(2){animation-delay:.2s}
+body:not(.audio-muted) .mute-btn .bars i:nth-child(3){animation-delay:.4s}
+@keyframes eq{ 0%,100%{height:30%} 50%{height:100%} }
+body.audio-muted .mute-btn .bars::after{
+  content:"";position:absolute;left:-3px;right:-3px;top:50%;
+  border-top:1.5px solid currentColor;transform:rotate(-35deg);
 }
-body.audio-muted .nav-fixed .audio-ind .bars{position:relative}
-body.audio-muted .nav-fixed .audio-ind .bars::after{
-  content:"";position:absolute;inset:-2px -4px;
-  border-top:1px solid currentColor;transform:rotate(-35deg);transform-origin:center;
-}
-body.audio-muted .nav-fixed .audio-ind .state::before{content:"Muted"}
-body:not(.audio-muted) .nav-fixed .audio-ind .state::before{content:"Sound"}
+body.audio-muted .mute-btn .state::before{content:"Muted"}
+body:not(.audio-muted) .mute-btn .state::before{content:"Sound"}
 .nav-fixed ul{display:none;list-style:none;gap:20px}
 @media(min-width:820px){.nav-fixed ul{display:flex}}
 .nav-fixed .reserve{display:flex;align-items:center;gap:8px}
@@ -257,7 +256,8 @@ body:not(.audio-muted) .nav-fixed .audio-ind .state::before{content:"Sound"}
 @media(max-width:760px){
   .hero-foot{grid-template-columns:1fr 1fr;row-gap:16px}
   .hero-foot .cell{grid-column:span 1!important;border-left:0;padding:0}
-  .hf-d{text-align:left}
+  .hero-foot .cell:nth-child(even){text-align:right}
+  .hero-foot .cell:nth-child(odd){text-align:left}
 }
 
 /* ══════════════════════════════════════════════
@@ -279,7 +279,8 @@ body:not(.audio-muted) .nav-fixed .audio-ind .state::before{content:"Sound"}
 @media(max-width:760px){
   .section-head{grid-template-columns:1fr 1fr;row-gap:12px}
   .sh{grid-column:span 1!important;border-left:0!important;padding:0!important}
-  .sh-d{text-align:left}
+  .sh:nth-child(even){text-align:right}
+  .sh:nth-child(odd){text-align:left}
 }
 
 /* ══════════════════════════════════════════════
@@ -380,7 +381,8 @@ footer.colophon .c-d{grid-column:span 3;text-align:right}
 @media(max-width:760px){
   footer.colophon .row{grid-template-columns:1fr 1fr;row-gap:12px}
   footer.colophon .cell{grid-column:span 1!important;border-left:0!important;padding:0!important}
-  footer.colophon .c-d{text-align:left}
+  footer.colophon .cell:nth-child(even){text-align:right}
+  footer.colophon .cell:nth-child(odd){text-align:left}
 }
 
 /* ══════════════════ SCROLL PROGRESS ══════════════════ */
@@ -429,6 +431,149 @@ body.dark-nav .scroll-progress{background:var(--inv-fg)}
 .cursor-dot.lg{width:80px;height:80px;background:#EDECE7}
 @media (pointer:coarse){.cursor-dot{display:none}}
 
+/* ══════════════════════════════════════════════
+   PRELOADER — full-screen brand splash.
+   Click anywhere to unmute audio and reveal site.
+═══════════════════════════════════════════════ */
+body.preloading{overflow:hidden;height:100vh}
+body.preloading main,body.preloading header,body.preloading section,body.preloading footer,body.preloading .nav-fixed{opacity:0;transition:opacity 1.2s cubic-bezier(.2,.8,.2,1)}
+body.preloaded main,body.preloaded header,body.preloaded section,body.preloaded footer,body.preloaded .nav-fixed{opacity:1}
+
+.preloader{
+  position:fixed;inset:0;z-index:9999;
+  background:#0A0A0A;color:#EDECE7;
+  display:grid;grid-template-rows:auto 1fr auto;
+  padding:var(--gutter);
+  cursor:pointer;
+  overflow:hidden;
+  user-select:none;
+  transition:opacity 1.0s cubic-bezier(.2,.8,.2,1), filter 1.0s cubic-bezier(.2,.8,.2,1);
+}
+.preloader::before{
+  /* vertical grid lines */
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:repeating-linear-gradient(to right,transparent 0,transparent calc(100%/12 - 1px),rgba(237,236,231,.07) calc(100%/12 - 1px),rgba(237,236,231,.07) calc(100%/12));
+  opacity:0;animation:preGrid 1.6s .1s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes preGrid{from{opacity:0}to{opacity:1}}
+
+.pre-top,.pre-bot{
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  padding:4px 0;position:relative;
+}
+.pre-top{border-bottom:1px solid rgba(237,236,231,.25);padding-bottom:18px}
+.pre-bot{border-top:1px solid rgba(237,236,231,.25);padding-top:18px;align-items:flex-end}
+.pre-top > *, .pre-bot > *{opacity:0;animation:preFade 1.0s cubic-bezier(.2,.8,.2,1) forwards}
+.pre-top > *:nth-child(1){animation-delay:.2s}
+.pre-top > *:nth-child(2){animation-delay:.3s}
+.pre-top > *:nth-child(3){animation-delay:.4s}
+.pre-bot > *:nth-child(1){animation-delay:.9s}
+.pre-bot > *:nth-child(2){animation-delay:1.0s}
+.pre-bot > *:nth-child(3){animation-delay:1.1s}
+@keyframes preFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.pre-mid{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(20px,4vh,40px);
+  position:relative;
+}
+
+.pre-mark-wrap{
+  width:clamp(100px,14vw,180px);height:auto;
+  position:relative;
+  opacity:0;animation:preMark 1.4s .15s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.pre-mark-wrap img{width:100%;height:auto;display:block;filter:invert(1);transform-origin:center;animation:preBreath 5.4s ease-in-out infinite;animation-delay:1.6s}
+@keyframes preMark{
+  0%{opacity:0;transform:scale(.6) translateY(20px);filter:blur(8px)}
+  60%{opacity:1;filter:blur(0)}
+  100%{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}
+}
+@keyframes preBreath{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.04)}
+}
+/* scanning shimmer that sweeps across the mark */
+.pre-mark-wrap::after{
+  content:"";position:absolute;top:-6%;bottom:-6%;left:-100%;width:40%;
+  background:linear-gradient(90deg,transparent,rgba(237,236,231,.15),transparent);
+  animation:preShimmer 3.6s 1.8s cubic-bezier(.2,.8,.2,1) infinite;
+  pointer-events:none;
+}
+@keyframes preShimmer{
+  0%{left:-50%}50%{left:110%}100%{left:110%}
+}
+
+.pre-word{
+  font-family:"Inter",sans-serif;font-weight:200;
+  font-size:clamp(36px,6vw,80px);line-height:1;
+  letter-spacing:0;opacity:0;
+  animation:preWord 1.4s .55s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes preWord{
+  0%{letter-spacing:0;opacity:0;filter:blur(6px)}
+  100%{letter-spacing:.32em;opacity:1;filter:blur(0)}
+}
+
+.pre-tag{
+  font-family:"Inter",sans-serif;font-weight:300;font-style:italic;
+  font-size:clamp(14px,1.3vw,18px);letter-spacing:.04em;
+  opacity:0;animation:preFade 1.0s .95s cubic-bezier(.2,.8,.2,1) forwards;
+  color:rgba(237,236,231,.72);
+}
+
+.pre-cta{
+  margin-top:clamp(16px,3vh,32px);
+  display:inline-flex;align-items:center;gap:12px;
+  padding:14px 24px;
+  border:1px solid rgba(237,236,231,.4);border-radius:999px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  opacity:0;animation:preCta 1.0s 1.2s cubic-bezier(.2,.8,.2,1) forwards;
+  transition:background .3s, color .3s, border-color .3s, transform .3s;
+}
+.pre-cta:hover{background:#EDECE7;color:#0A0A0A;border-color:#EDECE7;transform:translateY(-2px)}
+.pre-cta .dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 2.4s infinite}
+.pre-cta .arrow{display:inline-block;transition:transform .3s}
+.pre-cta:hover .arrow{transform:translateX(4px)}
+@keyframes preCta{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+/* reveal circle — explodes from click point to fill screen with homepage bg */
+.reveal-circle{
+  position:absolute;top:50%;left:50%;
+  width:40px;height:40px;border-radius:50%;
+  background:#EDECE7;
+  transform:translate(-50%,-50%) scale(0);
+  pointer-events:none;z-index:3;
+  will-change:transform;
+  box-shadow:0 0 0 0 rgba(237,236,231,0);
+}
+.preloader.exiting{pointer-events:none}
+.preloader.exiting .reveal-circle{
+  animation:circleBurst 1.0s cubic-bezier(.7,0,.2,1) forwards;
+}
+@keyframes circleBurst{
+  0%{transform:translate(-50%,-50%) scale(0);box-shadow:0 0 80px 20px rgba(237,236,231,0)}
+  12%{box-shadow:0 0 140px 40px rgba(237,236,231,.5)}
+  100%{transform:translate(-50%,-50%) scale(140);box-shadow:0 0 0 0 rgba(237,236,231,0)}
+}
+.preloader.exiting .pre-mark-wrap,
+.preloader.exiting .pre-word,
+.preloader.exiting .pre-tag,
+.preloader.exiting .pre-cta,
+.preloader.exiting .pre-top > *,
+.preloader.exiting .pre-bot > *{
+  opacity:0;transition:opacity .25s cubic-bezier(.4,0,.2,1);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .pre-mark-wrap img{animation:none}
+  .pre-mark-wrap::after{display:none}
+}
+
 /* ══════════════════ REVEAL ══════════════════ */
 .reveal{opacity:0;transform:translateY(20px);transition:opacity 1.0s cubic-bezier(.2,.8,.2,1),transform 1.0s cubic-bezier(.2,.8,.2,1)}
 .reveal.in{opacity:1;transform:none}
@@ -458,22 +603,52 @@ body.dark-nav .scroll-progress{background:var(--inv-fg)}
   </defs>
 </svg>
 
+<script>document.documentElement.classList.add('js');document.body.classList.add('preloading');</script>
+<!-- ══════════════════ PRELOADER ══════════════════ -->
+<div class="preloader" id="preloader" role="button" tabindex="0" aria-label="Click to enter the site with sound">
+  <div class="pre-top">
+    <span>Forma N°01</span>
+    <span>Volume 01 — Spring MMXXVI</span>
+    <span>Designed in Milano</span>
+  </div>
+  <div class="pre-mid">
+    <div class="pre-mark-wrap">
+      <img src="aerionn-mark.svg" alt="Aerionn" />
+    </div>
+    <div class="pre-word">AERIONN</div>
+    <div class="pre-tag">Elevated Journeys</div>
+    <div class="pre-cta">
+      <span class="dot"></span>
+      <span>Click to enter</span>
+      <span class="arrow">→</span>
+    </div>
+  </div>
+  <div class="pre-bot">
+    <span>A titanium carry-on, reconsidered.</span>
+    <span>Sound on</span>
+    <span>MMXXVI</span>
+  </div>
+  <div class="reveal-circle" aria-hidden="true"></div>
+</div>
+
 <!-- ══════════════════ GRID OVERLAY ══════════════════ -->
 <div class="grid-bg" aria-hidden="true"></div>
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
 
+<!-- ══════════════════ MUTE TOGGLE ══════════════════ -->
+<button class="mute-btn" id="muteBtn" aria-label="Toggle sound">
+  <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="state"></span>
+</button>
+
 <!-- ══════════════════ FIXED NAV ══════════════════ -->
 <nav class="nav-fixed">
-  <a href="#top" class="brand" id="brandToggle" aria-label="Aerionn — click to toggle sound">
+  <a href="#top" class="brand" aria-label="Aerionn home">
     <img src="aerionn-mark.svg" alt="Aerionn" />
     <span class="brand-name">AERIONN</span>
-    <span class="audio-ind" aria-live="polite">
-      <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="state"></span>
-    </span>
   </a>
-  <audio id="bgm" src="aerionn.mp3" loop autoplay preload="auto"></audio>
+  <audio id="bgm" src="aerionn.mp3" loop preload="auto"></audio>
   <ul>
     <li><a href="#material">Material</a></li>
     <li><a href="#form">Form</a></li>
@@ -829,26 +1004,28 @@ document.querySelectorAll('a, .cta, h2, .hero-line, .line').forEach(el=>{
   el.addEventListener('mouseleave', ()=> cursor && cursor.classList.remove('lg'));
 });
 
-/* ══════════════════ BACKGROUND AUDIO ══════════════════
-   Browsers block autoplay with sound. Strategy:
-   1. Try unmuted autoplay (works if user previously interacted with site).
-   2. If blocked, fall back to muted autoplay and auto-unmute on the
-      first user interaction anywhere (click, scroll, key, touch).
-   3. Brand click toggles mute manually at any time.
+/* ══════════════════ PRELOADER + AUDIO ══════════════════
+   User click on preloader = first user gesture, which
+   satisfies the browser autoplay policy. We start audio
+   with full sound on that click, then reveal the site.
 ═══════════════════════════════════════════════════════ */
 (function(){
   const bgm = document.getElementById('bgm');
-  const brand = document.getElementById('brandToggle');
-  if(!bgm || !brand) return;
+  const preloader = document.getElementById('preloader');
+  const muteBtn = document.getElementById('muteBtn');
+  if(!bgm) return;
 
   const TARGET_VOL = 0.55;
   bgm.loop = true;
+  bgm.volume = 0;
+  bgm.muted = true;
+  document.body.classList.add('audio-muted');
 
   function fadeTo(target, step=0.03, ms=40){
     clearInterval(window.__bgmFade);
     window.__bgmFade = setInterval(()=>{
       const cur = bgm.volume;
-      if(Math.abs(cur - target) < step){ bgm.volume = target; clearInterval(window.__bgmFade); return; }
+      if(Math.abs(cur - target) < 0.02){ bgm.volume = target; clearInterval(window.__bgmFade); return; }
       bgm.volume = cur < target ? Math.min(target, cur + step) : Math.max(target, cur - step);
     }, ms);
   }
@@ -864,43 +1041,41 @@ document.querySelectorAll('a, .cta, h2, .hero-line, .line').forEach(el=>{
     }
   }
 
-  // attempt 1 — unmuted autoplay (likely to fail on first visit)
-  bgm.muted = false;
-  bgm.volume = TARGET_VOL;
-  document.body.classList.remove('audio-muted');
-  const p = bgm.play();
-  if(p && p.catch){
-    p.catch(()=>{
-      // attempt 2 — muted autoplay, auto-unmute on first interaction
-      bgm.muted = true;
-      bgm.volume = 0;
-      document.body.classList.add('audio-muted');
-      bgm.play().catch(()=>{});
+  function enter(){
+    if(!preloader || preloader.classList.contains('exiting')) return;
+    // user interaction is now registered — play audio with sound
+    bgm.muted = false;
+    bgm.volume = 0;
+    bgm.play().catch(()=>{});
+    fadeTo(TARGET_VOL);
+    document.body.classList.remove('audio-muted');
+    preloader.classList.add('exiting');
+    setTimeout(()=>{
+      if(preloader && preloader.parentNode) preloader.parentNode.removeChild(preloader);
+      document.body.classList.remove('preloading');
+      document.body.classList.add('preloaded');
+    }, 1000);
+  }
 
-      const unmuteOnce = ()=>{
-        setMuted(false);
-        removeListeners();
-      };
-      const removeListeners = ()=>{
-        ['pointerdown','keydown','touchstart','wheel','scroll'].forEach(evt=>{
-          window.removeEventListener(evt, unmuteOnce, true);
-        });
-      };
-      ['pointerdown','keydown','touchstart','wheel','scroll'].forEach(evt=>{
-        window.addEventListener(evt, unmuteOnce, {once:true, capture:true, passive:true});
-      });
+  if(preloader){
+    preloader.addEventListener('click', enter);
+    preloader.addEventListener('keydown', e=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); enter(); }
+    });
+  } else {
+    document.body.classList.remove('preloading');
+  }
+
+  if(muteBtn){
+    muteBtn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      setMuted(!bgm.muted);
     });
   }
 
-  // brand click = manual toggle (doesn't navigate)
-  brand.addEventListener('click', (e)=>{
-    e.preventDefault();
-    setMuted(!bgm.muted);
-  });
-
   // resume on tab return
   document.addEventListener('visibilitychange', ()=>{
-    if(!document.hidden){ bgm.play().catch(()=>{}); }
+    if(!document.hidden && !bgm.muted){ bgm.play().catch(()=>{}); }
   });
 })();
 </script>
