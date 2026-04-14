@@ -473,7 +473,7 @@ body.dark-nav .scroll-progress{background:var(--inv-fg)}
       <span class="state"></span>
     </span>
   </a>
-  <audio id="bgm" src="aerionn.mp3" loop preload="auto" muted></audio>
+  <audio id="bgm" src="aerionn.mp3" loop autoplay preload="auto"></audio>
   <ul>
     <li><a href="#material">Material</a></li>
     <li><a href="#form">Form</a></li>
@@ -829,54 +829,78 @@ document.querySelectorAll('a, .cta, h2, .hero-line, .line').forEach(el=>{
   el.addEventListener('mouseleave', ()=> cursor && cursor.classList.remove('lg'));
 });
 
-/* ══════════════════ BACKGROUND AUDIO ══════════════════ */
+/* ══════════════════ BACKGROUND AUDIO ══════════════════
+   Browsers block autoplay with sound. Strategy:
+   1. Try unmuted autoplay (works if user previously interacted with site).
+   2. If blocked, fall back to muted autoplay and auto-unmute on the
+      first user interaction anywhere (click, scroll, key, touch).
+   3. Brand click toggles mute manually at any time.
+═══════════════════════════════════════════════════════ */
 (function(){
   const bgm = document.getElementById('bgm');
   const brand = document.getElementById('brandToggle');
   if(!bgm || !brand) return;
 
-  bgm.volume = 0;            // start silent even if unmuted
-  bgm.muted = true;
-  document.body.classList.add('audio-muted');
+  const TARGET_VOL = 0.55;
+  bgm.loop = true;
 
-  // attempt muted autoplay (allowed by all major browsers)
-  const attempt = bgm.play();
-  if(attempt && attempt.catch){ attempt.catch(()=>{}); }
+  function fadeTo(target, step=0.03, ms=40){
+    clearInterval(window.__bgmFade);
+    window.__bgmFade = setInterval(()=>{
+      const cur = bgm.volume;
+      if(Math.abs(cur - target) < step){ bgm.volume = target; clearInterval(window.__bgmFade); return; }
+      bgm.volume = cur < target ? Math.min(target, cur + step) : Math.max(target, cur - step);
+    }, ms);
+  }
 
   function setMuted(m){
     bgm.muted = m;
     document.body.classList.toggle('audio-muted', m);
     if(!m){
       bgm.play().catch(()=>{});
-      // fade volume in
-      let v = bgm.volume;
-      clearInterval(window.__bgmFade);
-      window.__bgmFade = setInterval(()=>{
-        v = Math.min(0.55, v + 0.03);
-        bgm.volume = v;
-        if(v >= 0.55) clearInterval(window.__bgmFade);
-      }, 40);
+      fadeTo(TARGET_VOL);
     } else {
-      // fade out
-      let v = bgm.volume;
-      clearInterval(window.__bgmFade);
-      window.__bgmFade = setInterval(()=>{
-        v = Math.max(0, v - 0.05);
-        bgm.volume = v;
-        if(v <= 0) clearInterval(window.__bgmFade);
-      }, 30);
+      fadeTo(0, 0.05, 30);
     }
   }
 
+  // attempt 1 — unmuted autoplay (likely to fail on first visit)
+  bgm.muted = false;
+  bgm.volume = TARGET_VOL;
+  document.body.classList.remove('audio-muted');
+  const p = bgm.play();
+  if(p && p.catch){
+    p.catch(()=>{
+      // attempt 2 — muted autoplay, auto-unmute on first interaction
+      bgm.muted = true;
+      bgm.volume = 0;
+      document.body.classList.add('audio-muted');
+      bgm.play().catch(()=>{});
+
+      const unmuteOnce = ()=>{
+        setMuted(false);
+        removeListeners();
+      };
+      const removeListeners = ()=>{
+        ['pointerdown','keydown','touchstart','wheel','scroll'].forEach(evt=>{
+          window.removeEventListener(evt, unmuteOnce, true);
+        });
+      };
+      ['pointerdown','keydown','touchstart','wheel','scroll'].forEach(evt=>{
+        window.addEventListener(evt, unmuteOnce, {once:true, capture:true, passive:true});
+      });
+    });
+  }
+
+  // brand click = manual toggle (doesn't navigate)
   brand.addEventListener('click', (e)=>{
-    // toggle sound instead of scrolling-to-top
     e.preventDefault();
     setMuted(!bgm.muted);
   });
 
-  // if tab loses focus and comes back, keep playing silently at least
+  // resume on tab return
   document.addEventListener('visibilitychange', ()=>{
-    if(!document.hidden && !bgm.muted){ bgm.play().catch(()=>{}); }
+    if(!document.hidden){ bgm.play().catch(()=>{}); }
   });
 })();
 </script>
