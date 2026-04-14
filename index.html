@@ -184,6 +184,31 @@ body.dark-nav .nav-fixed{background:var(--inv-bg);color:var(--inv-fg);border-bot
 .nav-fixed .brand img{width:22px;height:22px;display:block}
 body.dark-nav .nav-fixed .brand img{filter:invert(1)}
 .nav-fixed .brand-name{font-family:"Inter",sans-serif;font-weight:200;font-size:14px;letter-spacing:.34em}
+.nav-fixed .brand{cursor:pointer;position:relative}
+.nav-fixed .audio-ind{
+  display:inline-flex;align-items:center;gap:3px;margin-left:10px;
+  padding:4px 8px;border:1px solid currentColor;border-radius:999px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  opacity:.55;transition:opacity .3s;
+}
+.nav-fixed .brand:hover .audio-ind{opacity:1}
+.nav-fixed .audio-ind .bars{display:inline-flex;gap:2px;align-items:flex-end;height:10px}
+.nav-fixed .audio-ind .bars i{display:block;width:2px;background:currentColor;height:30%}
+body:not(.audio-muted) .nav-fixed .audio-ind{opacity:1}
+body:not(.audio-muted) .nav-fixed .audio-ind .bars i{animation:eq 1.1s ease-in-out infinite}
+body:not(.audio-muted) .nav-fixed .audio-ind .bars i:nth-child(2){animation-delay:.2s}
+body:not(.audio-muted) .nav-fixed .audio-ind .bars i:nth-child(3){animation-delay:.4s}
+@keyframes eq{
+  0%,100%{height:30%}
+  50%{height:100%}
+}
+body.audio-muted .nav-fixed .audio-ind .bars{position:relative}
+body.audio-muted .nav-fixed .audio-ind .bars::after{
+  content:"";position:absolute;inset:-2px -4px;
+  border-top:1px solid currentColor;transform:rotate(-35deg);transform-origin:center;
+}
+body.audio-muted .nav-fixed .audio-ind .state::before{content:"Muted"}
+body:not(.audio-muted) .nav-fixed .audio-ind .state::before{content:"Sound"}
 .nav-fixed ul{display:none;list-style:none;gap:20px}
 @media(min-width:820px){.nav-fixed ul{display:flex}}
 .nav-fixed .reserve{display:flex;align-items:center;gap:8px}
@@ -440,10 +465,15 @@ body.dark-nav .scroll-progress{background:var(--inv-fg)}
 
 <!-- ══════════════════ FIXED NAV ══════════════════ -->
 <nav class="nav-fixed">
-  <a href="#top" class="brand">
+  <a href="#top" class="brand" id="brandToggle" aria-label="Aerionn — click to toggle sound">
     <img src="aerionn-mark.svg" alt="Aerionn" />
     <span class="brand-name">AERIONN</span>
+    <span class="audio-ind" aria-live="polite">
+      <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="state"></span>
+    </span>
   </a>
+  <audio id="bgm" src="aerionn.mp3" loop preload="auto" muted></audio>
   <ul>
     <li><a href="#material">Material</a></li>
     <li><a href="#form">Form</a></li>
@@ -798,6 +828,57 @@ document.querySelectorAll('a, .cta, h2, .hero-line, .line').forEach(el=>{
   el.addEventListener('mouseenter', ()=> cursor && cursor.classList.add('lg'));
   el.addEventListener('mouseleave', ()=> cursor && cursor.classList.remove('lg'));
 });
+
+/* ══════════════════ BACKGROUND AUDIO ══════════════════ */
+(function(){
+  const bgm = document.getElementById('bgm');
+  const brand = document.getElementById('brandToggle');
+  if(!bgm || !brand) return;
+
+  bgm.volume = 0;            // start silent even if unmuted
+  bgm.muted = true;
+  document.body.classList.add('audio-muted');
+
+  // attempt muted autoplay (allowed by all major browsers)
+  const attempt = bgm.play();
+  if(attempt && attempt.catch){ attempt.catch(()=>{}); }
+
+  function setMuted(m){
+    bgm.muted = m;
+    document.body.classList.toggle('audio-muted', m);
+    if(!m){
+      bgm.play().catch(()=>{});
+      // fade volume in
+      let v = bgm.volume;
+      clearInterval(window.__bgmFade);
+      window.__bgmFade = setInterval(()=>{
+        v = Math.min(0.55, v + 0.03);
+        bgm.volume = v;
+        if(v >= 0.55) clearInterval(window.__bgmFade);
+      }, 40);
+    } else {
+      // fade out
+      let v = bgm.volume;
+      clearInterval(window.__bgmFade);
+      window.__bgmFade = setInterval(()=>{
+        v = Math.max(0, v - 0.05);
+        bgm.volume = v;
+        if(v <= 0) clearInterval(window.__bgmFade);
+      }, 30);
+    }
+  }
+
+  brand.addEventListener('click', (e)=>{
+    // toggle sound instead of scrolling-to-top
+    e.preventDefault();
+    setMuted(!bgm.muted);
+  });
+
+  // if tab loses focus and comes back, keep playing silently at least
+  document.addEventListener('visibilitychange', ()=>{
+    if(!document.hidden && !bgm.muted){ bgm.play().catch(()=>{}); }
+  });
+})();
 </script>
 </body>
 </html>
