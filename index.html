@@ -401,9 +401,24 @@ body.dark-nav .scroll-progress{background:var(--inv-fg)}
 
 /* ══════════════════ DYNAMIC POSTER ══════════════════ */
 .poster-type .line{
-  will-change:transform, filter;
-  transition:filter .1s linear;
+  will-change:transform, filter, translate, opacity;
+  transition:filter .1s linear, opacity 1.0s cubic-bezier(.2,.8,.2,1), translate 1.3s cubic-bezier(.16,.68,.32,.99);
 }
+/* Headlines fly in from alternating sides at the moment homepage is revealed */
+.poster-type .line:nth-child(1){--entry-x:-120vw}
+.poster-type .line:nth-child(2){--entry-x:120vw}
+.poster-type .line:nth-child(3){--entry-x:-120vw}
+body.preloading .poster-type .line{
+  opacity:0;
+  translate:var(--entry-x,0) 0;
+}
+body.preloaded .poster-type .line{
+  opacity:1;
+  translate:0 0;
+}
+body.preloaded .poster-type .line:nth-child(1){transition-delay:0s, .05s, .05s}
+body.preloaded .poster-type .line:nth-child(2){transition-delay:0s, .18s, .18s}
+body.preloaded .poster-type .line:nth-child(3){transition-delay:0s, .32s, .32s}
 /* unified parallax transform — composes X, Y, scale, rotation */
 [data-par],[data-par-x],[data-par-y],[data-par-scale],[data-par-rot]{
   will-change:transform;
