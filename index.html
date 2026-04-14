@@ -442,8 +442,8 @@ body.dark-nav .scroll-progress{background:var(--inv-fg)}
    Click anywhere to unmute audio and reveal site.
 ═══════════════════════════════════════════════ */
 body.preloading{overflow:hidden;height:100vh}
-body.preloading main,body.preloading header,body.preloading section,body.preloading footer,body.preloading .nav-fixed{opacity:0;transition:opacity 1.2s cubic-bezier(.2,.8,.2,1)}
-body.preloaded main,body.preloaded header,body.preloaded section,body.preloaded footer,body.preloaded .nav-fixed{opacity:1}
+/* Homepage stays fully rendered underneath the preloader — no opacity transition.
+   This guarantees zero blank gap when preloader is removed. */
 
 .preloader{
   position:fixed;inset:0;z-index:9999;
@@ -453,7 +453,6 @@ body.preloaded main,body.preloaded header,body.preloaded section,body.preloaded 
   cursor:pointer;
   overflow:hidden;
   user-select:none;
-  transition:opacity 1.0s cubic-bezier(.2,.8,.2,1), filter 1.0s cubic-bezier(.2,.8,.2,1);
 }
 .preloader::before{
   /* vertical grid lines */
@@ -572,8 +571,15 @@ body.preloaded main,body.preloaded header,body.preloaded section,body.preloaded 
 .preloader.exiting .pre-cta,
 .preloader.exiting .pre-top > *,
 .preloader.exiting .pre-bot > *{
-  opacity:0;transition:opacity .25s cubic-bezier(.4,0,.2,1);
+  opacity:0;transition:opacity .2s cubic-bezier(.4,0,.2,1);
 }
+/* ensure circle fully covers screen at end */
+.preloader.exiting::after{
+  content:"";position:absolute;inset:0;background:#EDECE7;
+  opacity:0;z-index:4;pointer-events:none;
+  animation:coverFlash .05s .95s linear forwards;
+}
+@keyframes coverFlash{to{opacity:1}}
 
 @media (prefers-reduced-motion: reduce){
   .pre-mark-wrap img{animation:none}
@@ -1056,11 +1062,23 @@ document.querySelectorAll('a, .cta, h2, .hero-line, .line').forEach(el=>{
     fadeTo(TARGET_VOL);
     document.body.classList.remove('audio-muted');
     preloader.classList.add('exiting');
-    setTimeout(()=>{
+
+    const circle = preloader.querySelector('.reveal-circle');
+    const done = ()=>{
       if(preloader && preloader.parentNode) preloader.parentNode.removeChild(preloader);
       document.body.classList.remove('preloading');
       document.body.classList.add('preloaded');
-    }, 1000);
+      // force parallax/scroll recalc immediately so viewport is painted correctly
+      dispatchEvent(new Event('scroll'));
+      dispatchEvent(new Event('resize'));
+    };
+    if(circle){
+      circle.addEventListener('animationend', done, {once:true});
+      // safety fallback in case animationend never fires
+      setTimeout(done, 1100);
+    } else {
+      done();
+    }
   }
 
   if(preloader){
