@@ -166,9 +166,9 @@ body.dark-grid .grid-bg::before{
 .mast-brand .tag{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px}
 
 @media(max-width:760px){
-  .masthead .grid12{display:grid;grid-template-columns:1fr 1fr;row-gap:16px}
-  .mast-cell{grid-column:span 1!important;border-left:0;padding:0}
-  .mast-brand{grid-column:1/-1!important;text-align:left}
+  .masthead .grid12{display:grid;grid-template-columns:1fr 1fr;row-gap:18px;column-gap:16px}
+  .mast-cell{grid-column:span 1!important;border-left:0!important;padding:0!important;min-height:auto}
+  .mast-cell:nth-child(odd){text-align:left}
   .mast-cell:nth-child(even){text-align:right}
 }
 
@@ -187,12 +187,18 @@ body.dark-nav .nav-fixed .brand img{filter:invert(1)}
 .nav-fixed .brand-name{font-family:"Inter",sans-serif;font-weight:200;font-size:14px;letter-spacing:.34em}
 /* Sound toggle — standalone button (not on brand) */
 .mute-btn{
-  position:fixed;bottom:20px;right:20px;z-index:92;
+  position:fixed !important;
+  bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  right:calc(20px + env(safe-area-inset-right,0px));
+  z-index:92;
   background:var(--bg);color:var(--fg);border:1px solid var(--fg);border-radius:999px;
   padding:10px 16px;display:inline-flex;align-items:center;gap:10px;cursor:pointer;
   font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
   transition:background .3s,color .3s,transform .3s,border-color .3s;
   line-height:1;
+}
+@media(max-width:760px){
+  .mute-btn{padding:8px 14px;font-size:9px;gap:8px}
 }
 body.dark-nav .mute-btn{background:var(--inv-bg);color:var(--inv-fg);border-color:var(--inv-fg)}
 .mute-btn:hover{transform:translateY(-2px)}
