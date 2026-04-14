@@ -181,7 +181,8 @@ body.dark-grid .grid-bg::before{
 }
 body.dark-nav .nav-fixed{background:var(--inv-bg);color:var(--inv-fg);border-bottom-color:var(--inv-fg)}
 .nav-fixed .brand{display:flex;align-items:center;gap:8px}
-.nav-fixed .brand svg{width:20px;height:20px;stroke:currentColor;fill:none}
+.nav-fixed .brand img{width:22px;height:22px;display:block}
+body.dark-nav .nav-fixed .brand img{filter:invert(1)}
 .nav-fixed .brand-name{font-family:"Inter",sans-serif;font-weight:200;font-size:14px;letter-spacing:.34em}
 .nav-fixed ul{display:none;list-style:none;gap:20px}
 @media(min-width:820px){.nav-fixed ul{display:flex}}
@@ -440,7 +441,7 @@ body.dark-nav .scroll-progress{background:var(--inv-fg)}
 <!-- ══════════════════ FIXED NAV ══════════════════ -->
 <nav class="nav-fixed">
   <a href="#top" class="brand">
-    <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="butt" stroke-linejoin="miter" aria-hidden="true"><path d="M100 22 L30 185"/><path d="M100 22 L170 185"/><path d="M2 85 L152 85"/><path d="M18 55 L75 70"/></svg>
+    <img src="aerionn-mark.svg" alt="Aerionn" />
     <span class="brand-name">AERIONN</span>
   </a>
   <ul>
@@ -547,7 +548,7 @@ body.dark-nav .scroll-progress{background:var(--inv-fg)}
   <div class="shell">
     <div class="section-head">
       <div class="sh sh-a"><div class="t-label">N°02</div><div class="t-micro">Form &amp; Motion</div></div>
-      <div class="sh sh-b"><div class="t-label">Drawn in Milano</div><div class="t-micro">45°27′ N</div></div>
+      <div class="sh sh-b"><div class="t-label">Designed in Milano</div><div class="t-micro">45°27′ N</div></div>
       <div class="sh sh-c"><div class="t-label">Matte</div><div class="t-micro">Brushed finish</div></div>
       <div class="sh sh-d"><div class="t-label">AIRMOVE™</div><div class="t-micro">360° dual spinners</div></div>
     </div>
@@ -650,7 +651,7 @@ body.dark-nav .scroll-progress{background:var(--inv-fg)}
       <div class="sh sh-a"><div class="t-label">N°05</div><div class="t-micro">Coming Soon</div></div>
       <div class="sh sh-b"><div class="t-label">Limited release</div><div class="t-micro">Forma N°01</div></div>
       <div class="sh sh-c"><div class="t-label">Ships</div><div class="t-micro">Spring 2026</div></div>
-      <div class="sh sh-d"><div class="t-label">From</div><div class="t-micro">Milano, Italia</div></div>
+      <div class="sh sh-d"><div class="t-label">Designed in</div><div class="t-micro">Milano</div></div>
     </div>
 
     <div class="stack reveal">
