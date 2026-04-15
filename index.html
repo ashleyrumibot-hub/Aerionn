@@ -413,7 +413,12 @@ body.dark-nav .nav-fixed .nav-manifesto:hover{color:var(--inv-bg)}
   overflow:hidden;
 }
 .manifesto-strip .shell{display:grid;grid-template-columns:repeat(12,1fr);gap:0;align-items:end}
+.manifesto-strip .mh-head{grid-column:1/-1;margin-bottom:clamp(32px,6vh,64px);border-top-color:#EDECE7;border-bottom-color:#EDECE7;color:#EDECE7}
+.manifesto-strip .mh-head .sh{border-left-color:rgba(237,236,231,.28);color:#EDECE7}
+.manifesto-strip .mh-head .t-micro{color:rgba(237,236,231,.62)}
 .manifesto-strip .mh-meta{grid-column:1/span 3;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(237,236,231,.62)}
+.manifesto-strip .mh-body{grid-column:1/span 7;font-family:var(--display);font-weight:400;font-size:clamp(18px,1.8vw,24px);line-height:1.4;color:rgba(237,236,231,.82);max-width:52ch;margin-top:clamp(16px,3vh,32px)}
+@media(max-width:760px){.manifesto-strip .mh-body{grid-column:1/-1}}
 .manifesto-strip .mh-line{
   grid-column:1/span 9;
   font-family:var(--display);font-weight:700;
@@ -944,18 +949,6 @@ body.preloading{overflow:hidden;height:100vh}
   </div>
 </section>
 
-<!-- ══════════════════ MANIFESTO TEASER ══════════════════ -->
-<aside class="manifesto-strip" aria-label="Anti-Grooves manifesto">
-  <div class="shell">
-    <div class="mh-meta">N°00 — A Manifesto · Filed MMXXVI</div>
-    <div class="mh-line">
-      We are <span class="strike">grooves.</span><br/>
-      <em>We are materialist.</em>
-    </div>
-    <a href="anti-grooves.html" class="mh-cta">Read the Anti-Grooves Manifesto <span class="arrow">→</span></a>
-  </div>
-</aside>
-
 <!-- ══════════════════ N°05 RESERVE ══════════════════ -->
 <section id="reserve" class="closing-poster inv">
   <div class="shell">
@@ -974,6 +967,25 @@ body.preloading{overflow:hidden;height:100vh}
     <a href="#" class="cta reveal d1">Coming Soon <span class="arrow">→</span></a>
   </div>
 </section>
+
+<!-- ══════════════════ N°06 ANTI-GROOVES — FINAL CARD ══════════════════ -->
+<aside id="anti-grooves" class="manifesto-strip" aria-label="Anti-Grooves manifesto">
+  <div class="shell">
+    <div class="section-head mh-head">
+      <div class="sh sh-a"><div class="t-label">N°06</div><div class="t-micro">A Manifesto</div></div>
+      <div class="sh sh-b"><div class="t-label">Anti-Grooves</div><div class="t-micro">Filed MMXXVI</div></div>
+      <div class="sh sh-c"><div class="t-label">Materialist</div><div class="t-micro">Position</div></div>
+      <div class="sh sh-d"><div class="t-label">Bold redesign</div><div class="t-micro">Incoming</div></div>
+    </div>
+    <div class="mh-meta">N°00 — A Manifesto · Filed MMXXVI · Milano</div>
+    <div class="mh-line reveal">
+      We are <span class="strike">grooves.</span><br/>
+      <em>We are materialist.</em>
+    </div>
+    <p class="mh-body reveal d1">An idea does not own metal. A shape is not a name. A bold redesign is coming — better than grooves.</p>
+    <a href="anti-grooves.html" class="mh-cta reveal d2">Read the Anti-Grooves Manifesto <span class="arrow">→</span></a>
+  </div>
+</aside>
 
 <footer class="colophon">
   <div class="row">
