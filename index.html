@@ -411,6 +411,10 @@ body.dark-nav .nav-fixed .nav-manifesto:hover{color:var(--inv-bg)}
   background:#0A0A0A;color:#EDECE7;
   padding:clamp(48px,9vh,120px) 0;
   overflow:hidden;
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  box-sizing:border-box;
 }
 .manifesto-strip .shell{display:grid;grid-template-columns:repeat(12,1fr);gap:0;align-items:end}
 .manifesto-strip .mh-head{grid-column:1/-1;margin-bottom:clamp(32px,6vh,64px);border-top-color:#EDECE7;border-bottom-color:#EDECE7;color:#EDECE7}
@@ -458,6 +462,7 @@ body.dark-nav .nav-fixed .nav-manifesto:hover{color:var(--inv-bg)}
 }
 @media(max-width:760px){
   .manifesto-strip .mh-meta,.manifesto-strip .mh-line,.manifesto-strip .mh-cta{grid-column:1/-1}
+  .manifesto-strip .mh-line{font-size:clamp(40px,11vw,80px)}
 }
 @media (prefers-reduced-motion: reduce){
   .manifesto-strip::before{animation:none;opacity:0}
