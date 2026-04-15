@@ -122,6 +122,37 @@ body.flashing .flash-layer{opacity:.85}
 
 .scroll-progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:95;background:var(--ink);mix-blend-mode:difference;transition:width .08s linear}
 
+/* ══════════════════ MUTE BUTTON (matches homepage) ══════════════════ */
+.mute-btn{
+  position:fixed !important;
+  bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  right:calc(20px + env(safe-area-inset-right,0px));
+  z-index:92;
+  background:var(--strobe);color:var(--ink);
+  border:1px solid var(--ink);border-radius:999px;
+  padding:10px 16px;display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+  font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  transition:background-color .06s linear,color .06s linear,border-color .06s linear,transform .3s;
+  line-height:1;
+  mix-blend-mode:difference;
+}
+@media(max-width:760px){
+  .mute-btn{padding:8px 14px;font-size:9px;gap:8px}
+}
+.mute-btn:hover{transform:translateY(-2px)}
+.mute-btn .bars{display:inline-flex;gap:2px;align-items:flex-end;height:12px;position:relative}
+.mute-btn .bars i{display:block;width:2px;background:currentColor;height:30%}
+body:not(.audio-muted) .mute-btn .bars i{animation:eq 1.1s ease-in-out infinite}
+body:not(.audio-muted) .mute-btn .bars i:nth-child(2){animation-delay:.2s}
+body:not(.audio-muted) .mute-btn .bars i:nth-child(3){animation-delay:.4s}
+@keyframes eq{ 0%,100%{height:30%} 50%{height:100%} }
+body.audio-muted .mute-btn .bars::after{
+  content:"";position:absolute;left:-3px;right:-3px;top:50%;
+  border-top:1.5px solid currentColor;transform:rotate(-35deg);
+}
+body.audio-muted .mute-btn .state::before{content:"Muted"}
+body:not(.audio-muted) .mute-btn .state::before{content:"Sound"}
+
 /* ══════════════════ MASTHEAD ══════════════════ */
 .masthead{position:relative;z-index:10;padding:18px 0;border-top:var(--rule);border-bottom:var(--rule);margin-top:64px}
 .masthead .grid12{align-items:center;min-height:64px}
@@ -328,6 +359,13 @@ footer.colophon .c-d{grid-column:span 3;text-align:right}
 <div class="grid-bg" aria-hidden="true"></div>
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+<!-- ══════════════════ AUDIO + MUTE ══════════════════ -->
+<audio id="bgm" src="Anti-Grooves%20Reel.mp3" loop preload="auto"></audio>
+<button class="mute-btn" id="muteBtn" aria-label="Toggle sound">
+  <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="state"></span>
+</button>
 
 <!-- ══════════════════ FIXED NAV ══════════════════ -->
 <nav class="nav-fixed">
@@ -727,6 +765,62 @@ document.querySelectorAll('a, .cta, h2, .hero-line, .line, .manifesto .item').fo
   el.addEventListener('mouseenter', ()=> cursor && cursor.classList.add('lg'));
   el.addEventListener('mouseleave', ()=> cursor && cursor.classList.remove('lg'));
 });
+
+/* ══════════════════ AUDIO ══════════════════
+   Autoplay muted (allowed by browsers). Unmute on
+   first user gesture — click, tap, key, scroll.
+═══════════════════════════════════════════════ */
+(function(){
+  const bgm = document.getElementById('bgm');
+  const muteBtn = document.getElementById('muteBtn');
+  if(!bgm) return;
+
+  const TARGET_VOL = 0.6;
+  bgm.loop = true;
+  bgm.volume = 0;
+  bgm.muted = true;
+  document.body.classList.add('audio-muted');
+  bgm.play().catch(()=>{}); // muted autoplay
+
+  function fadeTo(target, step=0.04, ms=40){
+    clearInterval(window.__bgmFade);
+    window.__bgmFade = setInterval(()=>{
+      const cur = bgm.volume;
+      if(Math.abs(cur - target) < 0.02){ bgm.volume = target; clearInterval(window.__bgmFade); return; }
+      bgm.volume = cur < target ? Math.min(target, cur + step) : Math.max(target, cur - step);
+    }, ms);
+  }
+
+  function setMuted(m){
+    bgm.muted = m;
+    document.body.classList.toggle('audio-muted', m);
+    if(!m){
+      bgm.play().catch(()=>{});
+      fadeTo(TARGET_VOL);
+    } else {
+      fadeTo(0, 0.06, 30);
+    }
+  }
+
+  let unlocked = false;
+  function unlock(){
+    if(unlocked) return;
+    unlocked = true;
+    setMuted(false);
+    removeGestureListeners();
+  }
+  function onBtn(e){ e.preventDefault(); unlocked = true; setMuted(!bgm.muted); }
+  const gestureEvents = ['click','touchstart','keydown','scroll','wheel','pointerdown'];
+  function removeGestureListeners(){
+    gestureEvents.forEach(ev=>removeEventListener(ev, unlock, {capture:true}));
+  }
+  gestureEvents.forEach(ev=>addEventListener(ev, unlock, {capture:true, passive:true, once:false}));
+  if(muteBtn) muteBtn.addEventListener('click', onBtn);
+
+  document.addEventListener('visibilitychange', ()=>{
+    if(!document.hidden && !bgm.muted){ bgm.play().catch(()=>{}); }
+  });
+})();
 </script>
 </body>
 </html>
