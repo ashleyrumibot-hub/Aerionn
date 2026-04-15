@@ -391,6 +391,73 @@ footer.colophon .c-d{grid-column:span 3;text-align:right}
   footer.colophon .cell:nth-child(odd){text-align:left}
 }
 
+/* ══════════════════════════════════════════════
+   MANIFESTO TEASER — link to /anti-grooves.html
+═══════════════════════════════════════════════ */
+.nav-fixed .nav-manifesto{
+  position:relative;
+  padding:4px 10px;
+  border:1.5px solid currentColor;
+  font-weight:700;
+  letter-spacing:.04em;
+  transition:background .25s,color .25s,transform .25s;
+}
+.nav-fixed .nav-manifesto:hover{background:currentColor;color:var(--bg);transform:translateY(-1px)}
+body.dark-nav .nav-fixed .nav-manifesto:hover{color:var(--inv-bg)}
+
+.manifesto-strip{
+  position:relative;z-index:2;
+  border-top:var(--rule);border-bottom:var(--rule);
+  background:#0A0A0A;color:#EDECE7;
+  padding:clamp(48px,9vh,120px) 0;
+  overflow:hidden;
+}
+.manifesto-strip .shell{display:grid;grid-template-columns:repeat(12,1fr);gap:0;align-items:end}
+.manifesto-strip .mh-meta{grid-column:1/span 3;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(237,236,231,.62)}
+.manifesto-strip .mh-line{
+  grid-column:1/span 9;
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(44px,9vw,150px);line-height:.9;letter-spacing:-.04em;
+  padding:clamp(24px,4vh,48px) 0;
+}
+.manifesto-strip .mh-line em{font-style:italic;font-weight:500}
+.manifesto-strip .mh-line .strike{text-decoration:line-through;text-decoration-thickness:8px;text-decoration-color:#FF2D55}
+.manifesto-strip .mh-cta{
+  grid-column:1/-1;margin-top:clamp(16px,3vh,32px);
+  display:inline-flex;align-items:center;gap:14px;align-self:start;
+  padding:18px 28px;background:#EDECE7;color:#0A0A0A;
+  font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.04em;
+  justify-self:start;width:fit-content;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),background .25s,color .25s;
+}
+.manifesto-strip .mh-cta:hover{transform:translateY(-2px);background:#FF2D55;color:#EDECE7}
+.manifesto-strip .mh-cta .arrow{transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.manifesto-strip .mh-cta:hover .arrow{transform:translateX(6px)}
+
+/* hard color pulse behind the strip headline */
+.manifesto-strip .mh-line{position:relative;z-index:2}
+.manifesto-strip::before{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:#FF2D55;
+  mix-blend-mode:difference;
+  opacity:0;
+  animation:mhPulse 2.6s cubic-bezier(.2,.8,.2,1) infinite;
+  pointer-events:none;
+}
+@keyframes mhPulse{
+  0%,88%,100%{opacity:0;background:#FF2D55}
+  90%{opacity:.55;background:#FFCC00}
+  92%{opacity:0;background:#00E0FF}
+  94%{opacity:.55;background:#7C3AED}
+  96%{opacity:0}
+}
+@media(max-width:760px){
+  .manifesto-strip .mh-meta,.manifesto-strip .mh-line,.manifesto-strip .mh-cta{grid-column:1/-1}
+}
+@media (prefers-reduced-motion: reduce){
+  .manifesto-strip::before{animation:none;opacity:0}
+}
+
 /* ══════════════════ SCROLL PROGRESS ══════════════════ */
 .scroll-progress{
   position:fixed;top:0;left:0;height:2px;width:0;z-index:95;
@@ -681,6 +748,7 @@ body.preloading{overflow:hidden;height:100vh}
     <li><a href="#form">Form</a></li>
     <li><a href="#spec">Specification</a></li>
     <li><a href="#longevity">Longevity</a></li>
+    <li><a href="anti-grooves.html" class="nav-manifesto">Anti-Grooves</a></li>
   </ul>
   <a href="#reserve" class="reserve"><span class="dot"></span>Coming Soon</a>
 </nav>
@@ -876,6 +944,18 @@ body.preloading{overflow:hidden;height:100vh}
   </div>
 </section>
 
+<!-- ══════════════════ MANIFESTO TEASER ══════════════════ -->
+<aside class="manifesto-strip" aria-label="Anti-Grooves manifesto">
+  <div class="shell">
+    <div class="mh-meta">N°00 — A Manifesto · Filed MMXXVI</div>
+    <div class="mh-line">
+      We are <span class="strike">grooves.</span><br/>
+      <em>We are materialist.</em>
+    </div>
+    <a href="anti-grooves.html" class="mh-cta">Read the Anti-Grooves Manifesto <span class="arrow">→</span></a>
+  </div>
+</aside>
+
 <!-- ══════════════════ N°05 RESERVE ══════════════════ -->
 <section id="reserve" class="closing-poster inv">
   <div class="shell">
@@ -941,7 +1021,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
    DYNAMIC SCROLL — progress, parallax, blur,
    cursor, and nav-theme toggle. All rAF-batched.
 ═══════════════════════════════════════════════ */
-const invSections = document.querySelectorAll('section.inv');
+const invSections = document.querySelectorAll('section.inv, .manifesto-strip');
 const bar = document.getElementById('scrollProgress');
 const parEls = document.querySelectorAll('[data-par],[data-par-x],[data-par-y],[data-par-scale],[data-par-rot]');
 const posterLines = document.querySelectorAll('.poster-type .line');
